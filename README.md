@@ -25,4 +25,7 @@ Further instructions:
 - First roll starts the game.
 - When game ends (i.e. after 10th frame is finished), the next roll starts a new game.
 
-## Tests
+## Running tests
+```
+pipenv run pytest
+```
