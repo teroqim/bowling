@@ -33,7 +33,8 @@ class Scorecard(object):
 
   def to_dict(self):
     # Create dict from internals with frames (including score breakdown for each) and total score
-    # dict should be {frames: <array>, score: <integer>}
+    # dict should be {frames: <array of frames>, score: <integer|None>}
+    # A frame has the format {first: <integer>, second: <integer|None>}
     pass
   
   def is_finished(self):
