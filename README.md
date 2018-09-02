@@ -16,6 +16,7 @@ Will start the API, listening on port 8080
 There's just one endpoint to use called 'roll'. You call it with the number of knocked-down pins in the next roll. You get an updated scorecard in return.
 
 Using curl you can do this to roll:
+
 ```
 curl localhost:8080/roll -XPOST -H "Content-Type: application/json" -d '{"pins_down":1}'
 ```
@@ -26,6 +27,13 @@ Further instructions:
 - When game ends (i.e. after 10th frame is finished), the next roll starts a new game.
 
 ## Running tests
+Run all tests:
+
 ```
 pipenv run pytest
+```
+Run specific test:
+
+```
+pipenv run pytest -k "<class_name> and <method_name>"
 ```

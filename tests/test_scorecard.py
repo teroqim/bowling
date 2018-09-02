@@ -29,21 +29,10 @@ class Test_to_dict__score(object):
     d = scorecard.to_dict()
     assert d['score'] == 20
 
-  # Rolls after finished has no effect on score
-  def test_score_unaffected_after_finished(self, scorecard):
-    # Create finished game
-    for i in range(20):
-      scorecard.roll(4)
-
-    score = scorecard.to_dict()['score']
-
-    scorecard.roll()
-    assert score == scorecard.to_dict()['score']
-
   # Spare
   def test_spare_increases_score_by_next_roll_twice(self, scorecard):
     scorecard.roll(2)
-    scorecard.roll(3)
+    scorecard.roll(8)
 
     score = scorecard.to_dict()['score']
 
@@ -62,9 +51,9 @@ class Test_to_dict__score(object):
     assert scorecard.to_dict()['score'] == (score + 8)
   
   # Strike third roll
-  def test_second_roll_after_strike_increases_score_by_twice_roll_value(self, scorecard):
+  def test_second_simple_roll_after_strike_increases_score_by_twice_roll_value(self, scorecard):
     scorecard.roll(10)
-    scorecard.roll(6)
+    scorecard.roll(4)
 
     score = scorecard.to_dict()['score']
 
@@ -76,7 +65,7 @@ class Test_to_dict__score(object):
   def test_third_roll_after_strike_increases_score_roll_value(self, scorecard):
     scorecard.roll(10)
     scorecard.roll(6)
-    scorecard.roll(6)
+    scorecard.roll(2)
 
     score = scorecard.to_dict()['score']
 
@@ -84,13 +73,15 @@ class Test_to_dict__score(object):
 
     assert scorecard.to_dict()['score'] == (score + 4)
 
+  # TODO: If last 2 rolls where both strikes, make sure score is updated properly
+
   # TODO: Test full series, with only simple value
 
   # TODO: Test full series, with only spares
 
   # TODO: Test full series, with only strikes
 
-  # TODO: Test mix of spares, simple and strikes
+  # TODO: Test mix of spares, simple rolls and strikes
 
 
 class Test_to_dict__frames(object):
@@ -101,30 +92,30 @@ class Test_to_dict__frames(object):
   # First roll creates frame with no second roll
   def test_first_roll_creates_frame(self, scorecard):
     scorecard.roll(3)
-    assert len(scorecard.to_dict['frames']) == 1
+    assert len(scorecard.to_dict()['frames']) == 1
 
   def test_first_roll_created_frame_with_correct_first_value(self, scorecard):
     scorecard.roll(3)
-    frame = scorecard.to_dict['frames'][0]
-    assert frame.first == 3
+    frame = scorecard.to_dict()['frames'][0]
+    assert frame['first'] == 3
 
   def test_first_roll_created_frame_with_no_second_value(self, scorecard):
     scorecard.roll(3)
-    frame = scorecard.to_dict['frames'][0]
-    assert frame.second == None
+    frame = scorecard.to_dict()['frames'][0]
+    assert frame['second'] == None
 
   def test_second_roll_in_frame_has_correct_value(self, scorecard):
     scorecard.roll(3)
     scorecard.roll(6)
-    frame = scorecard.to_dict['frames'][0]
-    assert frame.second == 6
+    frame = scorecard.to_dict()['frames'][0]
+    assert frame['second'] == 6
 
   # Roll after frame with a first non-strike roll creates second value
   def test_first_roll_after_finished_frame_with_2_rolls_creates_new_frame(self, scorecard):
     scorecard.roll(3)
     scorecard.roll(3)
     scorecard.roll(3)
-    assert len(scorecard.to_dict['frames']) == 2
+    assert len(scorecard.to_dict()['frames']) == 2
 
   # Roll after strike, creates new frame
   def test_roll_after_strike_creates_new_frame(self, scorecard):
@@ -152,6 +143,7 @@ class Test_to_dict__frames(object):
 
     assert len(scorecard.to_dict()['frames']) == 10
 
+  # TODO: Make sure first and second vals are updated correctly for spare and strikes
 
 class Test_is_finished(object):
   def test_initial_is_finished(self, scorecard):
